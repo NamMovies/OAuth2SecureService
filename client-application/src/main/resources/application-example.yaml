@@ -1,0 +1,37 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          custom-provider:
+            client-id: frontend-client
+            client-secret: frontend-secret
+            provider: auth-server
+            authorization-grant-type: authorization_code
+            redirect-uri: "https://localhost:8080/login/oauth2/code/custom-provider"
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          auth-server:
+            issuer-uri: "https://localhost:9000"
+server:
+  port: 8080
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: changeit
+    key-store-type: PKCS12
+    key-alias: authserver
+
+    trust-store: classpath:client-truststore.jks
+    trust-store-password: changeit
+    trust-store-type: JKS
+
+  servlet:
+    session:
+      cookie:
+        name: CLIENTSESSION
+        same-site: none
+        secure: true

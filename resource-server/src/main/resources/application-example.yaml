@@ -1,0 +1,21 @@
+
+server:
+  port: 8081
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: changeit
+    key-store-type: PKCS12
+    key-alias: authserver
+
+    trust-store: classpath:resource-truststore.jks
+    trust-store-password: changeit
+    trust-store-type: JKS
+spring:
+  application:
+    name: resource-server
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://localhost:9000

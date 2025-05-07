@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: authorization-server
+
+  sql:
+    init:
+      mode: never
+      schema-locations: classpath:db/init/authorization-server-schema-postgresql.sql
+
+  datasource:
+    url:            ${POSTGRES_URL:jdbc:postgresql://localhost:5432/oauth2}
+    username:       ${POSTGRES_USERNAME:postgres}
+    password:       ${POSTGRES_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto:    ${JPA_HIBERNATE_DDL_AUTO:create-drop}
+    show-sql:      ${JPA_SHOW_SQL:true}
+    properties:
+      hibernate:
+        dialect:   org.hibernate.dialect.PostgreSQLDialect
+
+  security:
+    oauth2:
+      authorizationserver:
+        issuer-uri:            ${AUTH_SERVER_ISSUER_URI:https://localhost:9000}
+        client-settings:
+          require-authorization-consent: ${AUTH_SERVER_REQUIRE_CONSENT:false}
+      client:
+        registration:
+          google:
+            client-id:     ${GOOGLE_CLIENT_ID:YOUR_GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET:YOUR_GOOGLE_CLIENT_SECRET}
+            scope:
+              - openid
+              - profile
+              - email
+            redirect-uri:  ${GOOGLE_REDIRECT_URI:https://localhost:9000/login/oauth2/code/google}
+
+DEFAULT_ADMIN_PASSWORD: ${DEFAULT_ADMIN_PASSWORD}
+
+server:
+  port: ${SERVER_PORT:9000}
+  ssl:
+    enabled:            true
+    key-store:          ${SSL_KEY_STORE:classpath:keystore.p12}
+    key-store-password: ${SSL_KEY_STORE_PASSWORD:changeit}
+    key-store-type:     PKCS12
+    key-alias:          ${SSL_KEY_ALIAS:authserver}
+  servlet:
+    session:
+      cookie:
+        name:            ${SESSION_COOKIE_NAME:AUTHSESSION}
+        same-site:       none
+        secure:          true
+
